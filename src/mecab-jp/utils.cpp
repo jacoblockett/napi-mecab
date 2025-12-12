@@ -7,15 +7,11 @@
 #include <fstream>
 #include <iostream>
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef HAVE_SYS_TYPES_H
+#if !defined(_WIN32) || defined(__CYGWIN__)
 #include <sys/types.h>
 #endif
 
-#ifdef HAVE_DIRENT_H
+#if !defined(_WIN32) || defined(__CYGWIN__)
 #include <dirent.h>
 #endif
 

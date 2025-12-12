@@ -15,7 +15,7 @@
 
 extern "C" {
 
-#ifdef HAVE_SYS_TYPES_H
+#if !defined(_WIN32) || defined(__CYGWIN__)
 #include <sys/types.h>
 #endif
 
@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-#ifdef HAVE_WINDOWS_H
+#if defined(_WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #endif
 #else
