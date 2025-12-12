@@ -41,9 +41,6 @@ script -l ru    # throws an error as russion is not supported
 # Windows 64-bit
 ./node_modules/mecab/scripts/install-windows-amd64.exe
 
-# macOS Intel (x86-64)
-./node_modules/mecab/scripts/install-darwin-amd64
-
 # macOS Apple Silicon (ARM64)
 ./node_modules/mecab/scripts/install-darwin-arm64
 
