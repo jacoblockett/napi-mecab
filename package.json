@@ -1,5 +1,5 @@
 {
-	"name": "mecab",
+	"name": "napi-mecab",
 	"version": "0.0.0",
 	"description": "A Node-API wrapper around the mecab/mecab-ko software.",
 	"type": "module",
