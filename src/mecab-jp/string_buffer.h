@@ -43,10 +43,15 @@ class StringBuffer {
   StringBuffer& operator<<(long int n)           { _ITOA(n); }
   StringBuffer& operator<<(unsigned short int n) { _UITOA(n); }
   StringBuffer& operator<<(unsigned int n)       { _UITOA(n); }
-  StringBuffer& operator<<(unsigned long int n)  { _UITOA(n); }
   // patch for github.com/jacoblockett/mecab
-  // overload was missing
-  StringBuffer& operator<<(size_t n)             { _UITOA(n); }
+#if defined(__LP64__) || defined(_WIN64)
+  // On 64-bit systems, size_t == unsigned long, so only define one
+  StringBuffer& operator<<(size_t n) { _UITOA(n); return *this; }
+#else
+  // On 32-bit systems, keep both
+  StringBuffer& operator<<(unsigned long int n) { _UITOA(n); return *this; }
+  StringBuffer& operator<<(size_t n) { _UITOA(n); return *this; }
+#endif
 #ifdef HAVE_UNSIGNED_LONG_LONG_INT
   StringBuffer& operator<<(unsigned long long int n) { _UITOA(n); }
 #endif
