@@ -9,42 +9,21 @@
 #include <errno.h>
 #include <string>
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 extern "C" {
 
-#ifdef HAVE_SYS_TYPES_H
+#if !defined(_WIN32) || defined(__CYGWIN__)
 #include <sys/types.h>
-#endif
-
-#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
 #include <fcntl.h>
-#endif
-
-#ifdef HAVE_STRING_H
+#include <string.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#else
+// Windows headers
+#include <windows.h>
 #include <string.h>
 #endif
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
-#ifdef HAVE_WINDOWS_H
-#include <windows.h>
-#endif
-#else
-
-#ifdef HAVE_SYS_MMAN_H
-#include <sys/mman.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-#endif
 }
 
 #include "common.h"

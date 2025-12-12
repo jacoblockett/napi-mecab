@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cstdint>
 #include <string>
 #include <vector>
 #include "common.h"
@@ -32,7 +33,6 @@ typedef unsigned long long uint64_t;
 #else   // _WIN32
 typedef unsigned char uint8_t;
 typedef unsigned long uint32_t;
-typedef unsigned __int64 uint64_t;
 #endif  // _WIN32
 #endif  // HAVE_STDINT_H
 
