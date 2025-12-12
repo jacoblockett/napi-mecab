@@ -3,7 +3,6 @@
 platforms=(
     "windows/amd64"
     "darwin/arm64"
-    "darwin/amd64"
     "linux/amd64"
 )
 
