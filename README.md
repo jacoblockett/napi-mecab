@@ -32,7 +32,7 @@ script [-l, --lang LANG]
 # Examples
 script          # installs all languages
 script -l jp,ko # installs japanese and korean dictionaries
-script -l ru    # throws an error as russion is not supported
+script -l ru    # throws an error as russian is not supported
 ```
 
 > ❔ Be sure to choose the correct one for your environment.
