@@ -19,7 +19,7 @@ Full license texts can be found in the [tp-licenses](tp-licenses/) directory.
 ## Installation
 
 ```bash
-pnpm i mecab
+pnpm i napi-mecab
 ```
 
 After installing the package, you'll need to run the included post-install script. This post install script will download the precompiled Node-API binary as well as the dictionary for each of the languages you ask for.
@@ -69,7 +69,7 @@ So long as you have compiled dictionaries under that path, it will choose the co
 ## Usage
 
 ```js
-import MeCab from "mecab"
+import MeCab from "napi-mecab"
 // cjs is also supported, i.e.
 // const MeCab = require("mecab")
 
