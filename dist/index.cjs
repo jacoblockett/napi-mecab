@@ -11,8 +11,8 @@ const __dirname$1 = path.dirname(__filename$1);
 const require$1 = module$1.createRequire((typeof document === 'undefined' ? require('u' + 'rl').pathToFileURL(__filename).href : (_documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === 'SCRIPT' && _documentCurrentScript.src || new URL('index.cjs', document.baseURI).href)));
 const binding = require$1("node-gyp-build")(path.join(__dirname$1, ".."));
 const engineDicts = {
-	jp: path.join(__dirname$1, "..", "dict", "mecab-jp-dic"),
-	ko: path.join(__dirname$1, "..", "dict", "mecab-ko-dic")
+	jp: path.join(__dirname$1, "..", "dict", "jp"),
+	ko: path.join(__dirname$1, "..", "dict", "ko")
 };
 const JP = "jp";
 const KO = "ko";

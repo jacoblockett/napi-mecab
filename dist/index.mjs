@@ -8,8 +8,8 @@ const __dirname$1 = dirname(__filename$1);
 const require$1 = createRequire(import.meta.url);
 const binding = require$1("node-gyp-build")(join(__dirname$1, ".."));
 const engineDicts = {
-	jp: join(__dirname$1, "..", "dict", "mecab-jp-dic"),
-	ko: join(__dirname$1, "..", "dict", "mecab-ko-dic")
+	jp: join(__dirname$1, "..", "dict", "jp"),
+	ko: join(__dirname$1, "..", "dict", "ko")
 };
 const JP = "jp";
 const KO = "ko";
