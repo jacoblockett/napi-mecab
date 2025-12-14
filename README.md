@@ -1,6 +1,6 @@
-# MeCab
+# Napi-MeCab
 
-A Node-API wrapper for the MeCab library. The MeCab engine's source code can be found [here (Original/Japanese)](src/mecab-jp/), and [here (Korean)](src/mecab-ko/). It has been patched for more idiomatic usage with Node.js and usage on Windows.
+A Node-API wrapper for the MeCab library. The MeCab engine's source code can be found [here (Original/Japanese)](src/napi-mecab-jp/), and [here (Korean)](src/napi-mecab-ko/). It has been patched for more idiomatic usage with Node.js and usage on Windows.
 
 ## License
 
@@ -39,13 +39,13 @@ script -l ru    # throws an error as russion is not supported
 
 ```bash
 # Windows 64-bit
-./node_modules/mecab/scripts/install-windows-amd64.exe
+./node_modules/napi-mecab/scripts/install-windows-amd64.exe
 
 # macOS Apple Silicon (ARM64)
-./node_modules/mecab/scripts/install-darwin-arm64
+./node_modules/napi-mecab/scripts/install-darwin-arm64
 
 # Linux 64-bit
-./node_modules/mecab/scripts/install-linux-amd64
+./node_modules/napi-mecab/scripts/install-linux-amd64
 ```
 
 ## Compiling from Source
@@ -53,18 +53,18 @@ script -l ru    # throws an error as russion is not supported
 Instead of using the included post-install script, you can also compile the binary from source. Your environment will need to support the use of `node-gyp` for this to work.
 
 ```bash
-cd node_modules/mecab
+cd node_modules/napi-mecab
 npx node-gyp build # or rebuild, if needed
 ```
 
 #### Dictionaries
 
-Precompiled Japanese and Korean dictionaries exist in [releases](https://github.com/jacoblockett/mecab/releases). Even if you compile the engine yourself, you'll need to find your own dictionaries. This package is configured to work first-class with Japanese and Korean using compiled dictionaries under the following paths:
+Precompiled Japanese and Korean dictionaries exist in [releases](https://github.com/jacoblockett/napi-mecab/releases). Even if you compile the engine yourself, you'll need to find your own dictionaries. This package is configured to work first-class with Japanese and Korean using compiled dictionaries under the following paths:
 
-`node_modules/mecab/dict/mecab-jp-dict`<br/>
-`node_modules/mecab/dict/mecab-ko-dict`
+`node_modules/napi-mecab/dict/napi-mecab-jp-dict`<br/>
+`node_modules/napi-mecab/dict/napi-mecab-ko-dict`
 
-So long as you have compiled dictionaries under that path, it will choose the correct engine to use. However, you can also provide your own dictionary to use and pass the path to the `MeCab` class (see: [API Reference](#api-reference)). Whatever dictionary you choose to use, though, just remember that the original MeCab and the Korean patch are only designed to work with Japanese and Korean respectively. Unless you're using your own modified Japanese/Korean dictionaries, I highly recommend just using the dictionaries found in [releases](https://github.com/jacoblockett/mecab/releases).
+So long as you have compiled dictionaries under that path, it will choose the correct engine to use. However, you can also provide your own dictionary to use and pass the path to the `MeCab` class (see: [API Reference](#api-reference)). Whatever dictionary you choose to use, though, just remember that the original MeCab and the Korean patch are only designed to work with Japanese and Korean respectively. Unless you're using your own modified Japanese/Korean dictionaries, I highly recommend just using the dictionaries found in [releases](https://github.com/jacoblockett/napi-mecab/releases).
 
 ## Usage
 

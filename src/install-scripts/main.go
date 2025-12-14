@@ -70,7 +70,7 @@ func main() {
 	}
 
 	// setup temporary directory for archive downloads
-	tempDir, err := os.MkdirTemp("", "mecab")
+	tempDir, err := os.MkdirTemp("", "napi-mecab")
 	if err != nil {
 		fmt.Println(err)
 		return
