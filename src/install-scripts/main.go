@@ -63,7 +63,11 @@ func main() {
 		return
 	}
 
-	dlUrl := fmt.Sprintf("https://github.com/jacoblockett/mecab/releases/download/v%s", version)
+	release, err := getGithubRelease(version)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	// setup temporary directory for archive downloads
 	tempDir, err := os.MkdirTemp("", "mecab")
@@ -74,10 +78,14 @@ func main() {
 	defer os.RemoveAll(tempDir)
 
 	// download engine into appropriate runtime prebuild directory
-	rt := getRuntime()
-	engineDownloadUrl := fmt.Sprintf("%s/prebuilds-%s-latest-%s.zip", dlUrl, runtime.GOOS, getArch())
+	prebuildURL, err := release.getBinaryURL()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	engineZipPath := filepath.Join(tempDir, "engine.zip")
-	err = download(engineDownloadUrl, engineZipPath)
+	err = downloadAsset(prebuildURL, engineZipPath)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -104,12 +112,18 @@ func main() {
 		return
 	}
 
+	rt := getRuntime()
+
 	// download requested language dictionaries into /dict
 	for _, lang := range requested {
-		dictName := fmt.Sprintf("mecab-%s-dict", lang)
-		dictDownloadUrl := fmt.Sprintf("%s/%s.zip", dlUrl, dictName)
-		dictZipPath := filepath.Join(tempDir, fmt.Sprintf("%s.zip", dictName))
-		err = download(dictDownloadUrl, dictZipPath)
+		dictURL, err := release.getDictionaryURL(lang)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		dictZipPath := filepath.Join(tempDir, fmt.Sprintf("%s.zip", lang))
+		err = downloadAsset(dictURL, dictZipPath)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -122,7 +136,7 @@ func main() {
 		}
 		defer dictZip.Close()
 
-		dictDir := filepath.Join(exeDir, "..", "dict", dictName)
+		dictDir := filepath.Join(exeDir, "..", "dict", lang)
 		os.RemoveAll(dictDir)
 		err = os.MkdirAll(dictDir, 0755)
 		if err != nil {
@@ -138,6 +152,65 @@ func main() {
 	}
 
 	fmt.Printf("Successfully installed prebuilt binary for your %s system and dictionaries for %s\n", rt, strings.Join(requested, ", "))
+}
+
+type GithubRelease struct {
+	Version string        `json:"tag_name"`
+	Assets  []GithubAsset `json:"assets"`
+}
+
+type GithubAsset struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
+func getGithubRelease(version string) (*GithubRelease, error) {
+	res, err := http.Get(fmt.Sprintf("https://api.github.com/repos/jacoblockett/napi-mecab/releases/tags/v%s", version))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch release info, bad status: %s", res.Status)
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var release GithubRelease
+	err = json.Unmarshal(body, &release)
+	if err != nil {
+		return nil, err
+	}
+
+	return &release, nil
+}
+
+func (r *GithubRelease) getBinaryURL() (string, error) {
+	name := fmt.Sprintf("prebuilds-%s-%s-%s.zip", runtime.GOOS, r.Version, getArch())
+
+	for _, asset := range r.Assets {
+		if asset.Name == name {
+			return asset.URL, nil
+		}
+	}
+
+	return "", fmt.Errorf("couldn't find a prebuild for %s", name)
+}
+
+func (r *GithubRelease) getDictionaryURL(lang string) (string, error) {
+	name := fmt.Sprintf("%s.zip", lang)
+
+	for _, asset := range r.Assets {
+		if asset.Name == name {
+			return asset.URL, nil
+		}
+	}
+
+	return "", fmt.Errorf("couldn't find a dictionary for %s", name)
 }
 
 func getRuntime() string {
@@ -179,8 +252,24 @@ func getPkgVersion(path string) (string, error) {
 	return pkg.Version, nil
 }
 
-func download(url, destination string) error {
-	res, err := http.Get(url)
+func downloadAsset(url, destination string) error {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Accept", "application/octet-stream")
+	req.Header.Set("User-Agent", "napi-mecab-installer")
+
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			req.Header.Set("Accept", "application/octet-stream")
+			req.Header.Set("User-Agent", "napi-mecab-installer")
+			return nil
+		},
+	}
+
+	res, err := client.Do(req)
 	if err != nil {
 		return err
 	}
@@ -197,7 +286,6 @@ func download(url, destination string) error {
 	defer out.Close()
 
 	_, err = io.Copy(out, res.Body)
-
 	return err
 }
 
