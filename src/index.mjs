@@ -145,9 +145,17 @@ class Token {
 		return null
 	}
 
-	get pronunciation() {
+	get reading() {
 		if (this.#engine === JP) {
 			return this.#features[7] !== EMPTY ? this.#features[7] : null
+		} else if (this.#engine === KO) {
+			return this.#features[3] !== EMPTY ? this.#features[3] : null
+		}
+	}
+
+	get pronunciation() {
+		if (this.#engine === JP) {
+			return this.#features[8] !== EMPTY ? this.#features[8] : null
 		} else if (this.#engine === KO) {
 			return this.#features[3] !== EMPTY ? this.#features[3] : null
 		}
