@@ -109,15 +109,7 @@ class Token {
 		return this.#surface
 	}
 
-	get primaryPOS() {
-		if (this.#engine === JP) {
-			return this.#features[0]
-		} else if (this.#engine === KO) {
-			return this.#features[0].split("+")[0]
-		}
-	}
-
-	get allPOS() {
+	get pos() {
 		if (this.#engine === JP) {
 			const list = [this.#features[0]]
 
@@ -138,7 +130,7 @@ class Token {
 	}
 
 	get hasMultiplePOS() {
-		return this.allPOS.length > 1
+		return this.pos.length > 1
 	}
 
 	get hasJongseong() {
