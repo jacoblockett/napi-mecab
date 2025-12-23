@@ -229,7 +229,7 @@ class Token {
 	 */
 	get lemma() {
 		if (this.#engine === JP) {
-			return this.#features[7]
+			return this.#features[7] !== EMPTY ? this.#features[7] : null
 		}
 
 		if (this.#engine === KO) {
@@ -239,10 +239,12 @@ class Token {
 				base = this.#features[7].split("/")[0]
 			}
 
-			if (isVerb) base = `${base}다`
+			if (KO_TAGS.verbs[this.#features[0].split("+")[0]]) base = `${base}다`
 
 			return base
 		}
+
+		return null
 	}
 
 	/**
@@ -417,6 +419,19 @@ class ExpressionToken {
 	 */
 	get morpheme() {
 		return this.#features[0]
+	}
+
+	/**
+	 * The actual dictionary headword as the token would appear in a dictionary.
+	 *
+	 * @returns {string}
+	 */
+	get lemma() {
+		let base = this.#features[0]
+
+		if (KO_TAGS.verbs[this.#features[1]]) base = `${base}다`
+
+		return base
 	}
 
 	/**
